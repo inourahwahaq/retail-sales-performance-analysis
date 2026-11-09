@@ -1,97 +1,55 @@
 # Retail Sales Performance Analysis
 
 ## Dashboard Preview
-<img width="883" height="497" alt="Screenshot 2026-10-19 at 5 25 41 pm" src="https://github.com/user-attachments/assets/2e2fdada-998e-444d-bc7f-9e08d0e4a5bd" />
 
+![Retail Sales Dashboard](dashboard.png)
 
+## Summary
 
-## Overview
+Sales grew every year from 2011 to 2014, but heavy discounts removed a large part of the profit. Order lines discounted above 20% were 22% of all lines and lost $815K in total.
 
-This project analyzes retail sales data using Python and Power BI to explore business performance and present key insights through an interactive dashboard.
+## Key Results
 
-The analysis focuses on sales, profit, customer activity, product performance, and regional trends to support data-driven decision-making.
+| Measure | Result |
+| --- | --- |
+| Total sales | $12.64M |
+| Total profit | $1.47M |
+| Profit margin | 11.6% |
+| Orders | 25,753 |
+| Customers | 795 |
+| Average order value | $490.93 |
 
----
+- Sales rose from $2.26M in 2011 to $4.30M in 2014.
+- Technology had the highest sales ($4.74M) and profit ($0.66M).
+- APAC was the most profitable market ($436K). EMEA had the lowest margin (5%).
 
-## Objectives
+| Discount | Profit margin |
+| --- | --- |
+| No discount | 25.3% |
+| 1-20% | 13.7% |
+| 21-40% | -17.3% |
+| Over 40% | -74.1% |
 
-- Analyze retail sales performance.
-- Compare sales and profit across categories and regions.
-- Identify the top-selling products.
-- Explore customer purchasing behavior.
-- Build an interactive Power BI dashboard.
+## Recommendation
 
----
+Review discounts above 20% first. This data shows the link between discount and profit, but not why each discount was given.
 
-## Tools & Technologies
+## Data
 
-- Python
-- Pandas
+Retail order lines from 2011 to 2014, with 51,290 rows. Some region names, such as Central and South, are used in more than one market. Some order IDs are used by different customers, so an order is counted by order ID and customer in the results above. The Power BI dashboard counts each order ID once, so it shows 25,035 orders and an average order value of $505.01.
+
+## Tools
+
+- Python (Pandas)
 - Power BI
-- CSV
 
----
-
-## Project Workflow
-
-1. Load the retail sales dataset.
-2. Prepare date columns and calculate shipping days.
-3. Perform exploratory data analysis (EDA).
-4. Generate business insights using Python.
-5. Export the prepared dataset.
-6. Build an interactive Power BI dashboard.
-
----
-
-## Key Business Insights
-
-The analysis includes:
-
-- Total Sales
-- Total Profit
-- Total Orders
-- Total Customers
-- Sales by Category
-- Profit by Region
-- Top 10 Products by sales
-
----
-
-## Dashboard Features
-
-The Power BI dashboard includes:
-
-- KPI Cards
-- Sales by Category
-- Profit by Region
-- Top 10 Products by Sales
-- Interactive filters (Region, Category, and Year)
-
----
-
-## Project Structure
+## Files
 
 ```
 retail-sales-performance-analysis/
-│
 ├── data_analysis.py
 ├── cleaned_superstore.csv
 ├── Retail_Sales_Dashboard.pbix
 ├── dashboard.png
 └── README.md
 ```
-
----
-
-## Skills Demonstrated
-
-- Data Analysis
-- Exploratory Data Analysis (EDA)
-- Business Intelligence
-- Dashboard Design
-- Data Visualization
-- Python
-- Pandas
-- Power BI
-
----

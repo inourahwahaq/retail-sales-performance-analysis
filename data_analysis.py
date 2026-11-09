@@ -1,87 +1,43 @@
 import pandas as pd
 
 # Load dataset
-df = pd.read_csv("superstore.csv")
+df = pd.read_csv("cleaned_superstore.csv")
 
-# Convert date columns
-df["Order.Date"] = pd.to_datetime(df["Order.Date"])
-df["Ship.Date"] = pd.to_datetime(df["Ship.Date"])
+# The same order ID is used by different customers on different dates,
+# so one order is one order ID for one customer
+orders = df[["Order.ID", "Customer.Name"]].drop_duplicates().shape[0]
 
 # Business KPIs
-print("Total Sales:", df["Sales"].sum())
-print("Total Profit:", round(df["Profit"].sum(), 2))
-print("Total Orders:", df["Order.ID"].nunique())
-print("Total Customers:", df["Customer.ID"].nunique())
-print("Average Order Value:", round(df["Sales"].mean(), 2))
+total_sales = df["Sales"].sum()
+total_profit = df["Profit"].sum()
 
-# Sales by Category
-print("\nSales by Category")
-print(df.groupby("Category")["Sales"].sum().sort_values(ascending=False))
+print("Total Sales:", total_sales)
+print("Total Profit:", round(total_profit, 2))
+print("Profit Margin %:", round(total_profit / total_sales * 100, 2))
+print("Total Orders:", orders)
+print("Total Customers:", df["Customer.Name"].nunique())
+print("Average Order Value:", round(total_sales / orders, 2))
 
-# Profit by Category
-print("\nProfit by Category")
-print(df.groupby("Category")["Profit"].sum().sort_values(ascending=False))
+# Sales and profit by year
+print("\nSales and Profit by Year")
+print(df.groupby("Year")[["Sales", "Profit"]].sum().round(0))
 
-# Top 10 Products by Sales
+# Sales and profit by category
+print("\nSales and Profit by Category")
+print(df.groupby("Category")[["Sales", "Profit"]].sum().round(0).sort_values("Sales", ascending=False))
+
+# Region names repeat across markets, so regions are read inside their market
+print("\nProfit by Market and Region")
+print(df.groupby(["Market", "Region"])["Profit"].sum().round(0).sort_values(ascending=False))
+
+# Top 10 products by sales
 print("\nTop 10 Products by Sales")
-print(
-    df.groupby("Product.Name")["Sales"]
-    .sum()
-    .sort_values(ascending=False)
-    .head(10)
-)
+print(df.groupby("Product.Name")["Sales"].sum().sort_values(ascending=False).head(10))
 
-# Sales by Region
-print("\nSales by Region")
-print(
-    df.groupby("Region")["Sales"]
-    .sum()
-    .sort_values(ascending=False)
-)
+# Profit margin by discount level
+df["Discount Level"] = pd.cut(df["Discount"], bins=[-0.01, 0, 0.2, 0.4, 1], labels=["No discount", "1-20%", "21-40%", "Over 40%"])
+discount = df.groupby("Discount Level", observed=True)[["Sales", "Profit"]].sum()
+discount["Margin %"] = (discount["Profit"] / discount["Sales"] * 100).round(1)
 
-# Profit by Region
-print("\nProfit by Region")
-print(
-    df.groupby("Region")["Profit"]
-    .sum()
-    .sort_values(ascending=False)
-)
-
-# Top 10 Customers by Sales
-print("\nTop 10 Customers by Sales")
-print(
-    df.groupby("Customer.Name")["Sales"]
-    .sum()
-    .sort_values(ascending=False)
-    .head(10)
-)
-
-# Top 10 Customers by Profit
-print("\nTop 10 Customers by Profit")
-print(
-    df.groupby("Customer.Name")["Profit"]
-    .sum()
-    .sort_values(ascending=False)
-    .head(10)
-)
-
-# Create Shipping Days column
-df["Shipping Days"] = (df["Ship.Date"] - df["Order.Date"]).dt.days
-
-print("\nAverage Shipping Days:")
-print(round(df["Shipping Days"].mean(), 2))
-
-# Profit by Discount
-
-print("\nAverage Profit by Discount")
-
-print(
-    df.groupby("Discount")["Profit"]
-    .mean()
-    .sort_values(ascending=False)
-)
-
-# Export cleaned dataset
-df.to_csv("cleaned_superstore.csv", index=False)
-
-print("\nCleaned dataset exported successfully.")
+print("\nProfit Margin by Discount Level")
+print(discount.round(0))
